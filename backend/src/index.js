@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes');//caminho relativo para nao buscar nos modulos
+const cors = require('cors');
 const app = express();
 
 mongoose.connect('mongodb+srv://gustavoomini:gustavoomini@cluster0-h85mk.mongodb.net/omini10?retryWrites=true&w=majority',{
@@ -8,6 +9,8 @@ mongoose.connect('mongodb+srv://gustavoomini:gustavoomini@cluster0-h85mk.mongodb
     useUnifiedTopology: true 
 });
 
+//app.use(cors({origin:'localhost:3000'})) ou 
+app.use(cors());
 app.use(express.json());
 app.use(routes);
 

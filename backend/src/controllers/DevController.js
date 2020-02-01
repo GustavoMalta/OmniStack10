@@ -51,37 +51,42 @@ module.exports = {
 
     async store(request, response){
         const {github, techs, latitude, longitude} = request.body;
-
+    try{
         let dev = await Dev.findOne({github});
 
-        if (!dev){           
+            if (!dev){           
 
-            const resposta = await axios.get("https://api.github.com/users/" + github);//com crase `template Strings`
-            const  {name, login, avatar_url, bio} = resposta.data; //name=login para caso nao exista o name
+                const resposta = await axios.get("https://api.github.com/users/" + github);//com crase `template Strings`
+                const  {name, login, avatar_url, bio} = resposta.data; //name=login para caso nao exista o name
+            
+                const techsArray = parseTechs(techs);
+            
+                const location = {
+                    type: 'Point',
+                    coordinates: [longitude, latitude],
+                };
+            
+                dev = await Dev.create({
+                    name: (name) ? name : login,//name=login nao funcionou, fiz esse if aqui
+                    github,
+                    avatar_url,
+                    bio,
+                    techs:techsArray,
+                    location,
+                })
         
-            const techsArray = parseTechs(techs);
-        
-            const location = {
-                type: 'Point',
-                coordinates: [longitude, latitude],
-            };
-        
-            dev = await Dev.create({
-                name: (name) ? name : login,//name=login nao funcionou, fiz esse if aqui
-                github,
-                avatar_url,
-                bio,
-                techs:techsArray,
-                location,
-            })
-    
-            console.log(name, avatar_url, bio);
-            console.log ("Usuario Criado");
+                console.log(name, avatar_url, bio);
+                console.log ("Usuario Criado");
 
-        }else{
-            console.log ("Usuario Ja existe");
-        }
+            }else{
+                console.log ("Usuario Ja existe");
+            }
+            
         return response.json(dev);
+    }catch{
+        return response.json({});
+    }
+        
     
     }
 
