@@ -55,11 +55,23 @@ function NovoApp(){
   async function handleDev(data){
     const response = await api.post('/devs',data);
 
-
     setDevs([...devs,response.data])
     console.log(response.data);
-
   }
+
+  async function handleDelete(data){
+    console.log(data._id)
+    const response = await api.delete('/devs/'+data._id);
+    
+    if(response.status==200){
+      const response = await api.get('/devs');
+      setDevs(response.data);
+
+      console.log(response.data);
+    }
+    console.log(response.status);
+  }
+
   return(
     <div id="app">
       <aside>
@@ -69,7 +81,7 @@ function NovoApp(){
     <main>
       <ul>
         {devs.map(dev =>(
-          <DevItem key={dev._id} dev={dev}/>
+          <DevItem onDelete={handleDelete} key={dev._id} dev={dev} />
         ))}
         
       </ul>

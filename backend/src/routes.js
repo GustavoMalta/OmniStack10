@@ -12,6 +12,7 @@ routes.get('/get', (request, response) => {
 routes.get('/devs', DevController.index);
 routes.post('/devs', DevController.store);
 routes.put('/devs', DevController.update);
+routes.delete('/devs/:_id', DevController.delete);
 
 routes.get('/search', SearchController.index)
 

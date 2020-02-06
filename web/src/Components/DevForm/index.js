@@ -10,13 +10,13 @@ function DevForm({ onSubmit }){
   useEffect(() =>{ //recebe duas funções, {}qual função executar e []quando executar 
     navigator.geolocation.getCurrentPosition(
     (position) =>{ //caso retorne sucesso
-      const {latitude, longitude} = position.coords;
+      let {latitude, longitude} = position.coords;
       console.log(latitude +' '+ longitude);
       
       //document.getElementById('Lat').value = latitude; //programação decalrativa
       
-      setLatitude(latitude); //programação imperativa
-      setLongitude(longitude);
+      setLatitude(Number((latitude).toFixed(11))); //programação imperativa
+      setLongitude(longitude.toString().substring(0,11));
     },
     (err) =>{ //caso retorne erro
       console.log(err);
@@ -66,7 +66,7 @@ function DevForm({ onSubmit }){
         <div className="input-block">
           <label htmlFor="Lat">Latitude</label>
           <input 
-            type="number" 
+            //type="number" 
             name="Lat" 
             id="Lat" 
             required 
@@ -76,7 +76,8 @@ function DevForm({ onSubmit }){
         <div className="input-block">
           <label htmlFor="Lon">Longitude</label>
           <input 
-            type="number" 
+            //type="number" 
+            max="20"
             name="Lon" 
             id="Lon" 
             required 

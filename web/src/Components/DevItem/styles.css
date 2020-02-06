@@ -45,3 +45,22 @@ li.dev-item a{
 li.dev-item a:hover{
     color: #5a2ea6;
 }
+li.dev-item div.d-flex{
+    display: flex;
+}
+
+.del-button{
+    background-color: #cc3300;
+    border-radius: 2px;
+    padding: 2px 5px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: .5s;
+    display: flex;
+    float: right;
+    margin: -20px;
+}
+.del-button:hover{
+    background-color: #ff4000;
+}

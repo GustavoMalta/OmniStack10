@@ -31,7 +31,7 @@ module.exports = {
             };
         
             dev = await Dev.updateOne({
-                name: (name) ? name : login,//name=login nao funcionou, fiz esse if aqui
+                name: (name) ? name : login, //name=login nao funcionou, fiz esse if aqui
                 github,
                 avatar_url,
                 bio,
@@ -88,6 +88,22 @@ module.exports = {
     }
         
     
+    },
+    
+    async delete(request, response){
+        console.log(    request.params);
+        const {_id} = request.params;
+        let dev = await Dev.findOne({_id});
+        if (dev){
+            try{
+                console.log('dentro: ' + _id)
+                await Dev.deleteOne({_id});
+            }catch(e){
+                console.log(e);
+            }
+        }
+        console.log('fora: ' + _id)
+        return response.json(dev);
     }
 
 }

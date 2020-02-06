@@ -8,24 +8,24 @@ module.exports = {
         //usca os devs no raio de 10Km
         //fintrar tecnologias
         const {lat, lon, techs} = request.query;
-        const techsArray = parseTechs(techs)
-
+        const techsArray = parseTechs(techs.toLowerCase())
+        techsArray
+        console.log(techsArray);
         var devs = await Dev.find({
             techs:{
-                $in:techsArray,
+                $in: techsArray.map(e => new RegExp(e, 'i')) //para fazer o case Insensitive. ignorar lower ou UPPER case
             },
-            location:{
-                $near:{
-                    $geometry:{
-                        type:"Point",
-                        coordinates: [lon,lat],
+                location:{
+                    $near:{
+                        $geometry:{
+                            type:"Point",
+                            coordinates: [lon,lat],
+                        },
+                        $maxDistance: 10000,
                     },
-                    $maxDistance: 10000,
                 },
-            },
         });
-
-        console.log(request.query);
+        console.log(devs)
         return response.json({devs})
     }
 
