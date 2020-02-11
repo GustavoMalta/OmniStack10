@@ -6,6 +6,7 @@ import { lockAsync } from 'expo/build/ScreenOrientation/ScreenOrientation';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import api from '../services/api'
+import {connect, disconnect, subscribeToNewDevs} from '../services/socket'
 
 function Main({navigation}){
     const [devs, setDevs] = useState([]);
@@ -33,6 +34,11 @@ function Main({navigation}){
         loadAllDevs();
         loadInicialPosition();
     }, [])
+
+    useEffect(()=>{
+        subscribeToNewDevs(dev=> setDevs([...devs,dev]))
+    },[devs]) //sempre que 'devs' for alrterado sera executado o subscribe
+
     async function loadAllDevs(){
         const response = await api.get('/devs');
         setDevs(response.data);
@@ -47,8 +53,22 @@ function Main({navigation}){
                 techs:techs,
             }
         });
+
         setDevs(response.data.devs);
+        setupWebsocket();
     }
+
+    function setupWebsocket(){
+        disconnect();
+
+        const {latitude, longitude} = currentRegion;
+
+        connect(
+            latitude,
+            longitude,
+            techs,
+        );
+    };
 
     function handleRegionChanged(region){
         setCurrentRegion(region);

@@ -9,8 +9,7 @@ module.exports = {
         //fintrar tecnologias
         const {lat, lon, techs} = request.query;
         const techsArray = parseTechs(techs.toLowerCase())
-        techsArray
-        console.log(techsArray);
+        
         var devs = await Dev.find({
             techs:{
                 $in: techsArray.map(e => new RegExp(e, 'i')) //para fazer o case Insensitive. ignorar lower ou UPPER case
@@ -25,7 +24,7 @@ module.exports = {
                     },
                 },
         });
-        console.log(devs)
+        console.log(devs.length+' Devs com ' + techs)
         return response.json({devs})
     }
 

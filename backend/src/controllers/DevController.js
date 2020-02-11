@@ -1,12 +1,12 @@
 const axios = require('axios');
 const Dev = require('../models/dev');
 const parseTechs = require('../utils/parseStringtoArray')
+const {findConnections,sendMessage} = require('../websocket')
 
 module.exports = {
     
     async index(request, response){
         const devs = await Dev.find();
-        console.log(devs)
         return response.json(devs);
     },
 
@@ -74,8 +74,13 @@ module.exports = {
                     techs:techsArray,
                     location,
                 })
-        
-                console.log(name, avatar_url, bio);
+                const sendSocketMessageTo = findConnections(
+                    {latitude,longitude}, 
+                    techsArray,
+                )
+
+                console.log(sendSocketMessageTo);
+                sendMessage(sendSocketMessageTo, 'newDev', dev)
                 console.log ("Usuario Criado");
 
             }else{
